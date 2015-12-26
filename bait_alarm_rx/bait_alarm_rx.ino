@@ -62,11 +62,6 @@ void loop() {
       {
         case 0:
           {
-            /*if (buffer[4] == 10)*/
-            //moo = ++moo % 2;
-            //digitalWrite(LED_PIN1, moo);
-            //digitalWrite(LED_PIN1, HIGH);  
-            
             play_run(LED_PIN1);
             
             after_run1_sec = AFTER_RUN_BLINK_SEC;
@@ -74,11 +69,6 @@ void loop() {
           break;
         case 1:
           {
-            /*if (buffer[4] == 10)*/
-            //moo = ++moo % 2;
-            //digitalWrite(LED_PIN2, moo);
-            //digitalWrite(LED_PIN2, HIGH);  
-            
             play_run(LED_PIN2);
             
             after_run2_sec = AFTER_RUN_BLINK_SEC;
