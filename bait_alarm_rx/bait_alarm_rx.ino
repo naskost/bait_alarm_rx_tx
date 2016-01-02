@@ -26,27 +26,33 @@
 #define LED_PIN2 PB4
 #define BUZZER_PIN  PB0
 
-byte names[] = {'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C'};  
-int tones[] = {1915, 1700, 1519, 1432, 1275, 1136, 1014, 956};
-//byte melody[] = "2d2a1f2c2d2a2d2c2f2d2a2c2d2a1f2c2d2a2a2g2p8p8p8p";
-//byte melody[] = "2d2a2d2a2d2a2d2a2b2a2b2a2b2a2d2a2b2a2b2a2b2a2b2a";
-int count = 0;
-int count2 = 0;
-//int count3 = 0;
-int MAX_COUNT = 10;
-
 #define BUFFER_SIZE 5
 uint8_t buffer[BUFFER_SIZE];
 
-#define  AFTER_RUN_BLINK_SEC  130
-uint32_t after_run1_sec  = 10;
-uint32_t after_run2_sec  = 10;
+#define  AFTER_RUN_BLINK_SEC  4700
+uint32_t after_run1_sec  = 0;
+uint32_t after_run2_sec  = 0;
+
+uint8_t count;
 
 void setup() {
   pinMode(LED_PIN1, OUTPUT);
   pinMode(LED_PIN2, OUTPUT);
+  
+  digitalWrite(LED_PIN1, HIGH);
+  digitalWrite(LED_PIN2, HIGH);
+  analogWrite(BUZZER_PIN, 500);
+  delay(100);
+  analogWrite(BUZZER_PIN, 0);
+  delay(50);
+  analogWrite(BUZZER_PIN, 500);  
+  delay(50);
+  analogWrite(BUZZER_PIN, 0);
+  delay(300);
+  digitalWrite(LED_PIN1, LOW);
+  digitalWrite(LED_PIN2, LOW);
 
-  man.setupReceive(RX_PIN, MAN_1200);
+  man.setupReceive(RX_PIN, MAN_600);
   man.beginReceiveArray(BUFFER_SIZE, buffer);
 }
 
@@ -84,41 +90,35 @@ void loop() {
     if (0 < after_run1_sec)
     {
       --after_run1_sec;
-      preview_run(LED_PIN1);
+
+      if (1 == after_run1_sec) {
+        digitalWrite(LED_PIN1, LOW);
+      }
     }
   
     if (0 < after_run2_sec)
     {
       --after_run2_sec;
-      preview_run(LED_PIN2);
-    }
+
+      if (1 == after_run2_sec) {
+        digitalWrite(LED_PIN2, LOW);
+      }      
+    }    
   }
+  
 }
 
 void play_run(uint8_t RunPin)
 {
-  analogWrite(BUZZER_PIN, 0);     
-  for (count = 0; count < MAX_COUNT; count++) {
-      digitalWrite(RunPin, HIGH);
-    //for (count3 = 0; count3 <= (melody[count*2] - 48) * 30; count3++) {
-      for (count2=0;count2<8;count2++) {
-        //if (names[count2] == melody[count*2 + 1]) {
-          analogWrite(BUZZER_PIN,500);
-          delayMicroseconds(tones[count2]);
-          analogWrite(BUZZER_PIN, 0);
-          delayMicroseconds(tones[count2]);
-        //} 
-      }
-    //}
-    digitalWrite(RunPin, LOW);    
-  }
-  
-  digitalWrite(RunPin, LOW);
-}
-
-void preview_run(uint8_t RunPin)
-{
   digitalWrite(RunPin, HIGH);
-  delay(1600);
-  digitalWrite(RunPin, LOW);
+
+  for (count = 0; count < 100; count++) {
+    analogWrite(BUZZER_PIN, 500);  
+    delay(9);
+    analogWrite(BUZZER_PIN, 0);        
+    delay(10);
+    analogWrite(BUZZER_PIN, 20);  
+    delay(2);
+    analogWrite(BUZZER_PIN, 0);    
+  }
 }

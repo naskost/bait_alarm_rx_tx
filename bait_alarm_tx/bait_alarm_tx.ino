@@ -33,7 +33,7 @@ void setup(){
   cli();//disable interrupts during setup
 
   man.workAround1MhzTinyCore(); //add this in order for transmitter to work with 1Mhz Attiny85/84
-  man.setupTransmit(TX_PIN, MAN_1200);  
+  man.setupTransmit(TX_PIN, MAN_600);  
   
   PCMSK |= (1 << INTERRUPTPIN1);
   PCMSK |= (1 << INTERRUPTPIN2);
@@ -53,8 +53,18 @@ void setup(){
 void loop(){
 
 #ifdef RANGE_TEST
-  delay(1000);
+  wait_for_second();
   man.transmitArray(5, data_pb3_H);
+  wait_for_second();
+  man.transmitArray(5, data_pb3_H);
+  wait_for_second();
+  man.transmitArray(5, data_pb3_H);
+  //man.transmitArray(5, data_pb3_H);
+  //man.transmitArray(5, data_pb3_H);
+  //man.transmitArray(5, data_pb3_H);
+  //man.transmitArray(5, data_pb3_H);  
+  //man.transmitArray(5, data_pb3_H);
+  //man.transmitArray(5, data_pb3_H);    
 #else
     system_sleep();
 #endif
@@ -78,9 +88,27 @@ ISR(PCINT0_vect)
   
   if (pinState1 > 0) {//look at the pin state on the pin PINB register- returns 1 if high
     man.transmitArray(5, data_pb3_H);
+/*    wait_for_second();
+    man.transmitArray(5, data_pb3_H);
+    wait_for_second();
+    man.transmitArray(5, data_pb3_H);
+*/
   }
  
   if (pinState2 > 0) {//look at the pin state on the pin PINB register- returns 1 if high
     man.transmitArray(5, data_pb4_H);
+/*    wait_for_second();
+    man.transmitArray(5, data_pb4_H);
+    wait_for_second();
+    man.transmitArray(5, data_pb4_H);
+*/    
   }  
+}
+
+void wait_for_second()
+{
+  for (int i=0; i < 10; ++i) 
+  {
+    delayMicroseconds(16383);
+  }    
 }
